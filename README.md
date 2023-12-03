@@ -1,4 +1,4 @@
-# CS_4261 - CozyEats
+# CS_4261 - CozyEats_Merchant
 
 <div align="center">
   <img src="https://github.com/benmelville/CozyEats/assets/78508685/5589ba89-5693-43d0-937a-52ca53a93ca7" alt="Screenshot">
