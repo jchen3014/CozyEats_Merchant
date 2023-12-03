@@ -92,6 +92,7 @@ struct SellerHomeView: View {
                 
                     
                     Toggle(averageIsShown7 ? "show 7-day average" : "hide 7-day average" , isOn: $averageIsShown7.animation())
+                        .padding()
                     
                     
                     
@@ -110,10 +111,25 @@ struct SellerHomeView: View {
                                 x: .value("Day", d.day),
                                 y: .value("Profits", d.profits))
                         }
+                        
+                        if averageIsShown30 {
+                            let averageProfit = thirtyDayProfitsTotal / 30
+                            RuleMark(y: .value("Average", averageProfit))
+                                .foregroundStyle(.gray)
+                                .annotation(position: .bottom, alignment: .bottomLeading) {
+                                    Text("Average Profit: \(averageProfit)")
+                                }
+                        }
                     }
-                    Text("30-Day Total: $")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    .aspectRatio(1, contentMode: .fit)
+                    
+                    Text("30-day Total: $\(calculateTotalProfits(data: thirtyDayData))")
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                
+                    
+                    Toggle(averageIsShown30 ? "show 30-day average" : "hide 30-day average" , isOn: $averageIsShown30.animation())
                         .padding()
                     
                     
@@ -143,6 +159,7 @@ struct SellerHomeView: View {
         }
         .onAppear {
                 sevenDayProfitsTotal = calculateTotalProfits(data: sevenDayData) // Calculate total profits for 7 days
+                thirtyDayProfitsTotal = calculateTotalProfits(data: thirtyDayData) // Calculate total profits for 30 days
         }
     }
 }
