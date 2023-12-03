@@ -33,7 +33,7 @@ struct SellerHomeView: View {
                 Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
                     // Your existing content
-                    Text("Add analytics here")
+                    Text("Your existing content here")
                         .padding()
 
                     // Display an empty bar graph
