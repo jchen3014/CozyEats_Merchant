@@ -4,7 +4,7 @@ import Charts
 struct SleepDataPoint: Identifiable {
     var id = UUID().uuidString
     var day: String
-    var hours: Int
+    var profits: Int
 }
 
 struct SellerHomeView: View {
@@ -12,31 +12,31 @@ struct SellerHomeView: View {
     var data = [
         SleepDataPoint(
         day: "Mon",
-        hours: 1),
+        profits: 5),
         
         SleepDataPoint(
         day: "Tue",
-        hours: 2),
+        profits: 3),
         
         SleepDataPoint(
         day: "Wed",
-        hours: 3),
+        profits: 10),
         
         SleepDataPoint(
         day: "Thu",
-        hours: 4),
+        profits: 2),
         
         SleepDataPoint(
         day: "Fri",
-        hours: 5),
+        profits: 6),
         
         SleepDataPoint(
         day: "Sat",
-        hours: 6),
+        profits: 3),
         
         SleepDataPoint(
         day: "Sun",
-        hours: 7)]
+        profits: 7)]
     
     
     var body: some View {
@@ -46,9 +46,12 @@ struct SellerHomeView: View {
                 ScrollView {
                     Chart {
                         ForEach (data) { d in
-                            BarMark(
+                            BarMark( //change BareMark to LineMark to get line graph
                                 x: .value("Day", d.day),
-                                y: .value("Hours", d.hours))
+                                y: .value("Profits", d.profits))
+                            .annotation{
+                                Text(String(d.profits))
+                            }
                         }
                     }
                     // Your existing content
