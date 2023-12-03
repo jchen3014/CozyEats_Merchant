@@ -8,14 +8,47 @@ struct ProfitDataPoint: Identifiable {
 }
 
 struct SellerHomeView: View {
-    var data = [
-        ProfitDataPoint(day: "Mon", profits: 5),
-        ProfitDataPoint(day: "Tue", profits: 3),
-        ProfitDataPoint(day: "Wed", profits: 10),
-        ProfitDataPoint(day: "Thu", profits: 2),
-        ProfitDataPoint(day: "Fri", profits: 6),
-        ProfitDataPoint(day: "Sat", profits: 3),
-        ProfitDataPoint(day: "Sun", profits: 7)
+    var sevenDayData = [
+        ProfitDataPoint(day: "Mon", profits: 20),
+        ProfitDataPoint(day: "Tue", profits: 237),
+        ProfitDataPoint(day: "Wed", profits: 108),
+        ProfitDataPoint(day: "Thu", profits: 55),
+        ProfitDataPoint(day: "Fri", profits: 156),
+        ProfitDataPoint(day: "Sat", profits: 99),
+        ProfitDataPoint(day: "Sun", profits: 305)
+    ]
+    
+    var thirtyDayData = [
+        ProfitDataPoint(day: "1", profits: 20),
+        ProfitDataPoint(day: "2", profits: 237),
+        ProfitDataPoint(day: "3", profits: 108),
+        ProfitDataPoint(day: "4", profits: 55),
+        ProfitDataPoint(day: "5", profits: 156),
+        ProfitDataPoint(day: "6", profits: 99),
+        ProfitDataPoint(day: "7", profits: 305),
+        ProfitDataPoint(day: "8", profits: 20),
+        ProfitDataPoint(day: "9", profits: 237),
+        ProfitDataPoint(day: "10", profits: 108),
+        ProfitDataPoint(day: "11", profits: 55),
+        ProfitDataPoint(day: "12", profits: 156),
+        ProfitDataPoint(day: "13", profits: 99),
+        ProfitDataPoint(day: "14", profits: 305),
+        ProfitDataPoint(day: "15", profits: 20),
+        ProfitDataPoint(day: "16", profits: 237),
+        ProfitDataPoint(day: "17", profits: 108),
+        ProfitDataPoint(day: "18", profits: 55),
+        ProfitDataPoint(day: "19", profits: 156),
+        ProfitDataPoint(day: "20", profits: 99),
+        ProfitDataPoint(day: "21", profits: 305),
+        ProfitDataPoint(day: "22", profits: 20),
+        ProfitDataPoint(day: "23", profits: 237),
+        ProfitDataPoint(day: "24", profits: 108),
+        ProfitDataPoint(day: "25", profits: 55),
+        ProfitDataPoint(day: "26", profits: 156),
+        ProfitDataPoint(day: "27", profits: 99),
+        ProfitDataPoint(day: "28", profits: 305),
+        ProfitDataPoint(day: "29", profits: 25),
+        ProfitDataPoint(day: "30", profits: 196)
     ]
     
     var body: some View {
@@ -23,8 +56,11 @@ struct SellerHomeView: View {
             ZStack {
                 Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
+                    
+                    
+                    Text("This Week's Profits:")
                     Chart {
-                        ForEach(data) { d in
+                        ForEach(sevenDayData) { d in
                             BarMark(
                                 x: .value("Day", d.day),
                                 y: .value("Profits", d.profits))
@@ -33,26 +69,44 @@ struct SellerHomeView: View {
                                 }
                         }
                     }
+                    Text("7-day Total: $")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                        .padding()
+                    
+                    
+                    
+                    
+                    
+                    Text("This Month's Profits:")
+                    Chart {
+                        ForEach(thirtyDayData) { d in
+                            LineMark(
+                                x: .value("Day", d.day),
+                                y: .value("Profits", d.profits))
+                        }
+                    }
+                    Text("30-Day Total: $")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                    
+                    
+                    
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Today's Profits:")
-                            .font(.headline)
-                        
-                        Text("Your 7-Day Profits:")
-                            .font(.headline)
-                        
-                        Text("Your 30-Day Profits:")
-                            .font(.headline)
-                            .padding(.top)
-                        
                         Text("Page Views (last 30 days):")
                             .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Text("Best Seller:")
                             .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                         
                         Text("Total Orders:")
                             .font(.headline)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .padding()
                 }
@@ -67,15 +121,10 @@ struct SellerHomeView: View {
 }
 
 
+
 // Preview
 struct SellerHomeView_Previews: PreviewProvider {
     static var previews: some View {
         SellerHomeView()
     }
 }
-
-
-
-
-
-//AnalyticsManager.shared.log(.menuSelected(.init(menuName: "Jackie's Restaurant", origin: "rmMenuViewController", timestamp: Date())))
