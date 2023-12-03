@@ -43,6 +43,7 @@
 		91FC76F52B1C4FF900D8147D /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 91FC76F42B1C4FF900D8147D /* FirebaseAuthCombine-Community */; };
 		91FC76F72B1C4FF900D8147D /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 91FC76F62B1C4FF900D8147D /* FirebaseCrashlytics */; };
 		91FC76F92B1C4FF900D8147D /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 91FC76F82B1C4FF900D8147D /* FirebaseDatabase */; };
+		91FC76FB2B1C50C300D8147D /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91FC76FA2B1C50C300D8147D /* AnalyticsManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,7 @@
 		1DEC47922ADB892A00D1B455 /* SignInWithEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithEmailViewModel.swift; sourceTree = "<group>"; };
 		1DEC47942ADBB0B200D1B455 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		1DEC47972ADBB26300D1B455 /* AuthDataResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDataResultModel.swift; sourceTree = "<group>"; };
+		91FC76FA2B1C50C300D8147D /* AnalyticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				1D9E25A12ADDA01D00E32C47 /* SellerHomeView.swift */,
 				1D9E25A72ADDE29800E32C47 /* MenuItemCardView.swift */,
 				1D9E25A52ADDAE6800E32C47 /* AddMenuItemView.swift */,
+				91FC76FA2B1C50C300D8147D /* AnalyticsManager.swift */,
 			);
 			path = Seller;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91FC76FB2B1C50C300D8147D /* AnalyticsManager.swift in Sources */,
 				1D9E25A62ADDAE6800E32C47 /* AddMenuItemView.swift in Sources */,
 				1D8C7A932AD79FE100497E90 /* FiveStarsView.swift in Sources */,
 				1D9E259B2ADCC24B00E32C47 /* SellerManager.swift in Sources */,
