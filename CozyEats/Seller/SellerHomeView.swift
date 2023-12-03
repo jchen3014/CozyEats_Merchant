@@ -52,7 +52,7 @@ struct SellerHomeView: View {
     ]
     
     @State private var averageIsShown7 = false
-    @State private var averageIsShown30 = false
+    @State private var averageIsShown30 = false   //
     @State private var sevenDayProfitsTotal = 0 // Store the total profits for 7 days here
     @State private var thirtyDayProfitsTotal = 0 // Store the total profits for 30 days here
     
