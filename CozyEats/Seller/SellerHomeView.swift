@@ -1,37 +1,56 @@
 import SwiftUI
+import Charts
 
-struct BarGraphView: View {
-    let data: [Double]
-    let barColor: Color
-    let barSpacing: CGFloat = 8.0
-
-    var body: some View {
-        GeometryReader { geometry in
-            HStack(alignment: .bottom, spacing: barSpacing) {
-                ForEach(data.indices, id: \.self) { index in
-                    VStack {
-                        Spacer()
-                        Rectangle()
-                            .fill(barColor)
-                            .frame(width: geometry.size.width / CGFloat(data.count) - barSpacing,
-                                   height: CGFloat(data[index]) * geometry.size.height)
-                    }
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-        }
-    }
+struct SleepDataPoint: Identifiable {
+    var id = UUID().uuidString
+    var day: String
+    var hours: Int
 }
 
 struct SellerHomeView: View {
-    // Example data for the empty bar graph
-    let emptyData: [Double] = [0, 0, 0, 0, 0] // Add the necessary data points
-
+    
+    var data = [
+        SleepDataPoint(
+        day: "Mon",
+        hours: 1),
+        
+        SleepDataPoint(
+        day: "Tue",
+        hours: 2),
+        
+        SleepDataPoint(
+        day: "Wed",
+        hours: 3),
+        
+        SleepDataPoint(
+        day: "Thu",
+        hours: 4),
+        
+        SleepDataPoint(
+        day: "Fri",
+        hours: 5),
+        
+        SleepDataPoint(
+        day: "Sat",
+        hours: 6),
+        
+        SleepDataPoint(
+        day: "Sun",
+        hours: 7)]
+    
+    
     var body: some View {
         NavigationView {
             ZStack {
                 Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
+                    Chart {
+                        ForEach (data) { d in
+                            BarMark(
+                                x: .value("Day", d.day),
+                                y: .value("Hours", d.hours))
+                        }
+                    }
                     // Your existing content
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Today's Profits:")
@@ -52,12 +71,6 @@ struct SellerHomeView: View {
                         
                         Text("Total Orders:")
                             .font(.headline)
-                        
-
-                        // Display an empty bar graph
-                        BarGraphView(data: emptyData, barColor: .blue) // Customize color as needed
-                            .frame(height: 200) // Adjust height as per requirement
-                            .padding()
                     }
                     .padding()
                 }
