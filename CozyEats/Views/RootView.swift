@@ -17,13 +17,6 @@ struct RootView: View {
         
         if showSignInView {
             AuthenticationView(showSignInView: $showSignInView, userType: $userType)
-        } else if userType == "customer" {
-            TabView(selection: $selection) {
-                customerProfileViewTab
-                customerHomeViewTab
-                customerMapViewTab
-            }
-//            .tint(.primary)
         } else if userType == "seller" {
             TabView(selection: $selection) {
                 sellerProfileViewTab
@@ -50,41 +43,8 @@ enum Tab: String {
 
 extension RootView {
     
-    private var customerProfileViewTab: some View {
-        CustomerProfileView(showSignInView: $showSignInView)
-            .tabItem {
-                Label {
-                    Text("Profile")
-                } icon: {
-                    Image(systemName: "person.fill")
-                }
-            }
-            .tag(Tab.Profile)
-    }
+
     
-    private var customerHomeViewTab: some View {
-        CustomerHomeView()
-            .tabItem {
-                Label {
-                    Text("Home")
-                } icon: {
-                    Image(systemName: "house.fill")
-                }
-            }
-            .tag(Tab.Home)
-    }
-    
-    private var customerMapViewTab: some View {
-        CustomerMapView()
-            .tabItem {
-                Label {
-                    Text("Map")
-                } icon: {
-                    Image(systemName: "map")
-                }
-            }
-            .tag(Tab.Settings)
-    }
     
     
     
