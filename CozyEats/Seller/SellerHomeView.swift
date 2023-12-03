@@ -7,6 +7,12 @@ struct ProfitDataPoint: Identifiable {
     var profits: Int
 }
 
+struct PageViewDataPoint: Identifiable {
+    var id = UUID().uuidString
+    var day: String
+    var views: Int
+}
+
 struct SellerHomeView: View {
     var sevenDayData = [
         ProfitDataPoint(day: "Mon", profits: 20),
@@ -51,10 +57,45 @@ struct SellerHomeView: View {
         ProfitDataPoint(day: "30", profits: 500)
     ]
     
+    var pageViews = [
+        PageViewDataPoint(day: "1", views: 2),
+        PageViewDataPoint(day: "2", views: 23),
+        PageViewDataPoint(day: "3", views: 10),
+        PageViewDataPoint(day: "4", views: 5),
+        PageViewDataPoint(day: "5", views: 15),
+        PageViewDataPoint(day: "6", views: 9),
+        PageViewDataPoint(day: "7", views: 30),
+        PageViewDataPoint(day: "8", views: 2),
+        PageViewDataPoint(day: "9", views: 23),
+        PageViewDataPoint(day: "10", views: 10),
+        PageViewDataPoint(day: "11", views: 5),
+        PageViewDataPoint(day: "12", views: 15),
+        PageViewDataPoint(day: "13", views: 9),
+        PageViewDataPoint(day: "14", views: 30),
+        PageViewDataPoint(day: "15", views: 2),
+        PageViewDataPoint(day: "16", views: 23),
+        PageViewDataPoint(day: "17", views: 10),
+        PageViewDataPoint(day: "18", views: 5),
+        PageViewDataPoint(day: "19", views: 15),
+        PageViewDataPoint(day: "20", views: 9),
+        PageViewDataPoint(day: "21", views: 30),
+        PageViewDataPoint(day: "22", views: 2),
+        PageViewDataPoint(day: "23", views: 23),
+        PageViewDataPoint(day: "24", views: 10),
+        PageViewDataPoint(day: "25", views: 5),
+        PageViewDataPoint(day: "26", views: 15),
+        PageViewDataPoint(day: "27", views: 9),
+        PageViewDataPoint(day: "28", views: 30),
+        PageViewDataPoint(day: "29", views: 38),
+        PageViewDataPoint(day: "30", views: 50)
+    ]
+    
     @State private var averageIsShown7 = false
-    @State private var averageIsShown30 = false   //
+    @State private var averageIsShown30 = false
+    @State private var averageIsShownPV = false
     @State private var sevenDayProfitsTotal = 0 // Store the total profits for 7 days here
     @State private var thirtyDayProfitsTotal = 0 // Store the total profits for 30 days here
+    @State private var PageViewTotal = 0
     
     var body: some View {
         NavigationView {
@@ -62,8 +103,7 @@ struct SellerHomeView: View {
                 Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
                    
-                    
-                    Text("This Week's Profits:")
+                    Text("This Week's Profits")
                     Chart {
                         ForEach(sevenDayData) { d in
                             BarMark(
@@ -104,7 +144,7 @@ struct SellerHomeView: View {
                     
                     
                     
-                    Text("This Month's Profits:")
+                    Text("This Month's Profits")
                     Chart {
                         ForEach(thirtyDayData) { d in
                             LineMark(
@@ -135,6 +175,49 @@ struct SellerHomeView: View {
                     
                     
                     
+                    
+                    
+                    
+                    
+                    Text("This Month's Page Views")
+                    Chart {
+                        ForEach(pageViews) { d in
+                            AreaMark(
+                                x: .value("Day", d.day),
+                                y: .value("Views", d.views))
+                        }
+                        
+                        if averageIsShownPV {
+                            let averageProfit = PageViewTotal / 30
+                            RuleMark(y: .value("Average", averageProfit))
+                                .foregroundStyle(.gray)
+                                .annotation(position: .bottom, alignment: .bottomLeading) {
+                                    Text("Average Views: \(averageProfit)")
+                                }
+                        }
+                    }
+                    .aspectRatio(1, contentMode: .fit)
+                    .padding()
+                    
+                    Text("30-day Total: \(calculateTotalPageViews(data: pageViews)) views")
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                
+                    
+                    Toggle(averageIsShownPV ? "show 30-day average" : "hide 30-day average" , isOn: $averageIsShownPV.animation())
+                        .padding()
+
+
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Page Views (last 30 days):")
                             .font(.headline)
@@ -160,12 +243,17 @@ struct SellerHomeView: View {
         .onAppear {
                 sevenDayProfitsTotal = calculateTotalProfits(data: sevenDayData) // Calculate total profits for 7 days
                 thirtyDayProfitsTotal = calculateTotalProfits(data: thirtyDayData) // Calculate total profits for 30 days
+                PageViewTotal = calculateTotalPageViews(data: pageViews)
         }
     }
 }
 
 func calculateTotalProfits(data: [ProfitDataPoint]) -> Int {
         return data.map { $0.profits }.reduce(0, +)
+    }
+
+func calculateTotalPageViews(data: [PageViewDataPoint]) -> Int {
+        return data.map { $0.views }.reduce(0, +)
     }
 
 
