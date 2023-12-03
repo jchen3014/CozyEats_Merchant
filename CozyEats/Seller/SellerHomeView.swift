@@ -1,68 +1,67 @@
-//
-//  SellerHomeView.swift
-//  CozyEats
-//
-//  Created by Benjamin Melville on 10/16/23.
-//
-
 import SwiftUI
 
+struct BarGraphView: View {
+    let data: [Double]
+    let barColor: Color
+    let barSpacing: CGFloat = 8.0
 
-@MainActor
-final class SellerViewModel: ObservableObject {
-    
-    @Published private(set) var user: Seller? = nil
-    
-    func loadCurrentUser() async throws {
-        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
-        self.user = try await SellerManager.shared.getSeller(userId: authDataResult.uid)
+    var body: some View {
+        GeometryReader { geometry in
+            HStack(alignment: .bottom, spacing: barSpacing) {
+                ForEach(data.indices, id: \.self) { index in
+                    VStack {
+                        Spacer()
+                        Rectangle()
+                            .fill(barColor)
+                            .frame(width: geometry.size.width / CGFloat(data.count) - barSpacing,
+                                   height: CGFloat(data[index]) * geometry.size.height)
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        }
     }
-    
-    
 }
 
 struct SellerHomeView: View {
-    
-    @StateObject private var viewModel = SellerViewModel()
-    
+    // Example data for the empty bar graph
+    let emptyData: [Double] = [0, 0, 0, 0, 0] // Add the necessary data points
+
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ZStack {
-                Color.tan
+                Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    if let user = viewModel.user {
-                        if let menu = user.menu {
-                            ForEach(menu) { menuItem in
-                                MenuItemCardView(menu: menuItem)
-                                Divider()
+                    // Your existing content
+                    Text("Add analytics here")
+                        .padding()
+
+                    // Display an empty bar graph
+                    BarGraphView(data: emptyData, barColor: .blue) // Customize color as needed
+                        .frame(height: 200) // Adjust height as per requirement
+                        .padding()
                 }
-                        }
-                    }
-                }
-                
             }
             .navigationTitle("Cozy Eats")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink {
-                        AddMenuItemView()
+                        Text("Add")
                     } label: {
                         Image(systemName: "plus")
-                            .foregroundStyle(Color.primary)
+                            .foregroundColor(.primary)
                             .font(.headline)
                             .fontWeight(.semibold)
                     }
                 }
             }
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarBackground(Color.accentColor, for: .navigationBar)
-        }
-        .task {
-            try? await viewModel.loadCurrentUser()
         }
     }
 }
 
-#Preview {
-    SellerHomeView()
+// Preview
+struct SellerHomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        SellerHomeView()
+    }
 }
