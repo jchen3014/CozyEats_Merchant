@@ -119,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				1D24CF682ACF73C400B0C848 /* CozyEatsApp.swift */,
+				91FC76FA2B1C50C300D8147D /* AnalyticsManager.swift */,
 				1D9E259E2ADCCF1D00E32C47 /* Firebase */,
 				1D9E259D2ADCCED500E32C47 /* Seller */,
 				1DEC478B2ADB7F6700D1B455 /* Authentication */,
@@ -162,7 +163,6 @@
 				1D9E25A12ADDA01D00E32C47 /* SellerHomeView.swift */,
 				1D9E25A72ADDE29800E32C47 /* MenuItemCardView.swift */,
 				1D9E25A52ADDAE6800E32C47 /* AddMenuItemView.swift */,
-				91FC76FA2B1C50C300D8147D /* AnalyticsManager.swift */,
 			);
 			path = Seller;
 			sourceTree = "<group>";

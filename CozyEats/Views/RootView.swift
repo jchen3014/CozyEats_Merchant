@@ -1,17 +1,10 @@
-//
-//  HomeView.swift
-//  CozyEats
-//
-//  Created by Benjamin Melville on 10/9/23.
-//
-
 import SwiftUI
 
 struct RootView: View {
     
     @State private var selection: Tab = .Home
     @State private var showSignInView: Bool = true
-    @State private var userType: String = "customer"
+    @State private var userType: String = "seller"
     
     var body: some View {
         

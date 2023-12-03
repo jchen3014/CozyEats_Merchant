@@ -65,3 +65,9 @@ struct SellerHomeView_Previews: PreviewProvider {
         SellerHomeView()
     }
 }
+
+
+
+
+
+//AnalyticsManager.shared.log(.menuSelected(.init(menuName: "Jackie's Restaurant", origin: "rmMenuViewController", timestamp: Date())))
