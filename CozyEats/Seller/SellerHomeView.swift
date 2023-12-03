@@ -47,16 +47,21 @@ struct SellerHomeView: View {
         ProfitDataPoint(day: "26", profits: 156),
         ProfitDataPoint(day: "27", profits: 99),
         ProfitDataPoint(day: "28", profits: 305),
-        ProfitDataPoint(day: "29", profits: 25),
-        ProfitDataPoint(day: "30", profits: 196)
+        ProfitDataPoint(day: "29", profits: 389),
+        ProfitDataPoint(day: "30", profits: 500)
     ]
+    
+    @State private var averageIsShown7 = false
+    @State private var averageIsShown30 = false
+    @State private var sevenDayProfitsTotal = 0 // Store the total profits for 7 days here
+    @State private var thirtyDayProfitsTotal = 0 // Store the total profits for 30 days here
     
     var body: some View {
         NavigationView {
             ZStack {
                 Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    
+                   
                     
                     Text("This Week's Profits:")
                     Chart {
@@ -65,15 +70,34 @@ struct SellerHomeView: View {
                                 x: .value("Day", d.day),
                                 y: .value("Profits", d.profits))
                                 .annotation{
-                                    Text(String(d.profits))
+                                    Text(String(d.profits)).foregroundColor(.green)
+                                }
+                        }
+                        
+                        if averageIsShown7 {
+                            let averageProfit = sevenDayProfitsTotal / 7
+                            RuleMark(y: .value("Average", averageProfit))
+                                .foregroundStyle(.gray)
+                                .annotation(position: .bottom, alignment: .bottomLeading) {
+                                    Text("Average Profit: \(averageProfit)")
                                 }
                         }
                     }
-                    Text("7-day Total: $")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    .aspectRatio(1, contentMode: .fit)
                     
-                        .padding()
+                    Text("7-day Total: $\(calculateTotalProfits(data: sevenDayData))")
+                                            .font(.headline)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .padding()
+                
+                    
+                    Toggle(averageIsShown7 ? "show 7-day average" : "hide 7-day average" , isOn: $averageIsShown7.animation())
+                    
+                    
+                    
+                    
+                    
+                    
                     
                     
                     
@@ -117,9 +141,15 @@ struct SellerHomeView: View {
                 }
             }
         }
+        .onAppear {
+                sevenDayProfitsTotal = calculateTotalProfits(data: sevenDayData) // Calculate total profits for 7 days
+        }
     }
 }
 
+func calculateTotalProfits(data: [ProfitDataPoint]) -> Int {
+        return data.map { $0.profits }.reduce(0, +)
+    }
 
 
 // Preview
