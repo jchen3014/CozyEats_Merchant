@@ -135,6 +135,7 @@ final class SellerHomeViewModel: ObservableObject {
             for item in soldItems {
                 menu.append(FoodItemDataPoint(name: item.name, numberOrdered: item.quantity ?? 0))
             }
+            menu = menu.sorted(by: { $0.name < $1.name})
             
             
             
@@ -185,14 +186,14 @@ struct SellerHomeView: View {
                     
                     WeekProfitsView(sevenDayProfitsTotal: calculateTotalProfits(data: viewModel.sevenDayData), sevenDayData: viewModel.sevenDayData)
                     MonthProfitsView(thirtyDayProfitsTotal: calculateTotalProfits(data: viewModel.thirtyDayData), thirtyDayData: viewModel.thirtyDayData)
-//                    MonthPageViewsView()
-                    CustomerFavoritesView(menu: viewModel.menu)
+                    MonthPageViewsView()
+                    CustomerFavoritesView(menu: viewModel.menu, totals: calculateFavoriteTotals())
                    
                     
        
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Total Orders (all-time): 1234")
+                        Text("Total Orders (all-time): \(allTimeOrders())")
                             .font(.headline)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
@@ -210,6 +211,34 @@ struct SellerHomeView: View {
         }
         
     }
+    
+    func calculateFavoriteTotals() -> [String: Int] {
+        var favorites: [String: Int] = [:]
+        for dish in viewModel.menu {
+            if favorites.keys.description.contains(dish.name) {
+                favorites[dish.name]! += dish.numberOrdered
+            } else {
+                favorites[dish.name] = dish.numberOrdered
+            }
+        }
+        
+        return favorites
+    }
+    
+    
+    func allTimeOrders() -> Int {
+        var total = 0
+        let allOrders = calculateFavoriteTotals()
+        for item in allOrders.values {
+            total += item
+        }
+        
+        return total
+    }
+    
+    
+    
+    
 }
 
 func calculateTotalProfits(data: [ProfitDataPoint]) -> Int {
@@ -355,49 +384,6 @@ struct MonthPageViewsView: View {
     }
 }
 
-struct CustomerFavoritesView: View {
-    
-    let menu: [FoodItemDataPoint]
-    
-    var body: some View {
-        // View content for customer favorites
-        Text("Customer Favorites")
-        Chart {
-            let total = calculateFavoriteTotals()
-            ForEach(menu) { d in
-                BarMark(
-                    x: .value("name", d.name),
-                    y: .value("numberOrdered", d.numberOrdered))
-                .annotation {
-                    Text(String(total[d.name] ?? 0)).foregroundColor(.green)
-                }
-            }
-        }
-        .aspectRatio(1, contentMode: .fit)
-        .padding()
-        
-        if let maxItem = menu.max(by: { $0.numberOrdered < $1.numberOrdered }) {
-            Text("Customer Favorite: \(maxItem.name)")
-                                    .font(.headline)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding()
-        }
-
-    }
-    
-    func calculateFavoriteTotals() -> [String: Int] {
-        var favorites: [String: Int] = [:]
-        for dish in menu {
-            if favorites.keys.description.contains(dish.name) {
-                favorites[dish.name]! += dish.numberOrdered 
-            } else {
-                favorites[dish.name] = dish.numberOrdered
-            }
-        }
-        
-        return favorites
-    }
-}
 
 
 

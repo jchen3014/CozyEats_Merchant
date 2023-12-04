@@ -12,6 +12,7 @@
 		1D24CF702ACF73C600B0C848 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1D24CF6F2ACF73C600B0C848 /* Preview Assets.xcassets */; };
 		1D8C7A932AD79FE100497E90 /* FiveStarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D8C7A922AD79FE100497E90 /* FiveStarsView.swift */; };
 		1D9242A32AD490DA00BD8BD8 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9242A22AD490DA00BD8BD8 /* RootView.swift */; };
+		1D9D4F7E2B1DCF18000CF75D /* CustomerFavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9D4F7D2B1DCF18000CF75D /* CustomerFavoritesView.swift */; };
 		1D9E25902ADC70C400E32C47 /* SignUpWithEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9E258F2ADC70C400E32C47 /* SignUpWithEmailView.swift */; };
 		1D9E25932ADC823C00E32C47 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 1D9E25922ADC823C00E32C47 /* FirebaseAuth */; };
 		1D9E25952ADC94A200E32C47 /* CustomerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9E25942ADC94A200E32C47 /* CustomerManager.swift */; };
@@ -52,6 +53,7 @@
 		1D24CF6F2ACF73C600B0C848 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		1D8C7A922AD79FE100497E90 /* FiveStarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveStarsView.swift; sourceTree = "<group>"; };
 		1D9242A22AD490DA00BD8BD8 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		1D9D4F7D2B1DCF18000CF75D /* CustomerFavoritesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerFavoritesView.swift; sourceTree = "<group>"; };
 		1D9E258F2ADC70C400E32C47 /* SignUpWithEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpWithEmailView.swift; sourceTree = "<group>"; };
 		1D9E25942ADC94A200E32C47 /* CustomerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomerManager.swift; sourceTree = "<group>"; };
 		1D9E259A2ADCC24B00E32C47 /* SellerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerManager.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				1D9E25A12ADDA01D00E32C47 /* SellerHomeView.swift */,
 				1D9E25A72ADDE29800E32C47 /* MenuItemCardView.swift */,
 				1D9E25A52ADDAE6800E32C47 /* AddMenuItemView.swift */,
+				1D9D4F7D2B1DCF18000CF75D /* CustomerFavoritesView.swift */,
 			);
 			path = Seller;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				1D9E25CA2ADE36CC00E32C47 /* StorageManager.swift in Sources */,
 				1D24CF692ACF73C400B0C848 /* CozyEatsApp.swift in Sources */,
 				1D9E25952ADC94A200E32C47 /* CustomerManager.swift in Sources */,
+				1D9D4F7E2B1DCF18000CF75D /* CustomerFavoritesView.swift in Sources */,
 				1D9E25A82ADDE29800E32C47 /* MenuItemCardView.swift in Sources */,
 				1D9E25A02ADD9FF700E32C47 /* SellerProfileView.swift in Sources */,
 				1D9E25A22ADDA01D00E32C47 /* SellerHomeView.swift in Sources */,
