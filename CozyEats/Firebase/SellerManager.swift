@@ -20,9 +20,11 @@ struct MenuItem: Codable, Identifiable, Hashable {
     let description: String?
     let cuisine: String?
     var quantity: Int?
+    var seller: Seller?
+    var date: Date?
     
     
-    init(name: String, price: Int, description: String, cuisine: String, images: [String]) {
+    init(name: String, price: Int, description: String, cuisine: String, images: [String], seller: Seller) {
         self.name = name
         self.images = images
         self.price = price
@@ -30,6 +32,8 @@ struct MenuItem: Codable, Identifiable, Hashable {
         self.description = description
         self.cuisine = cuisine
         self.quantity = nil
+        self.seller = seller
+        self.date = Date()
     }
     
     
@@ -41,6 +45,8 @@ struct MenuItem: Codable, Identifiable, Hashable {
         case description
         case cuisine
         case quantity
+        case seller
+        case date
     }
     
     init(from decoder: Decoder) throws {
@@ -52,6 +58,8 @@ struct MenuItem: Codable, Identifiable, Hashable {
         self.description = try container.decodeIfPresent(String.self, forKey: .description)
         self.cuisine = try container.decodeIfPresent(String.self, forKey: .cuisine)
         self.quantity = try container.decodeIfPresent(Int.self, forKey: .quantity)
+        self.seller = try container.decodeIfPresent(Seller.self, forKey: .seller)
+        self.date = try container.decodeIfPresent(Date.self, forKey: .date)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -63,6 +71,8 @@ struct MenuItem: Codable, Identifiable, Hashable {
         try container.encodeIfPresent(self.description, forKey: .description)
         try container.encodeIfPresent(self.cuisine, forKey: .cuisine)
         try container.encodeIfPresent(self.quantity, forKey: .quantity)
+        try container.encodeIfPresent(self.seller, forKey: .seller)
+        try container.encodeIfPresent(self.date, forKey: .date)
     }
     
     
@@ -76,6 +86,7 @@ struct Seller: Codable, Hashable {
     let email: String?
     let photoUrl: String?
     let menu: [MenuItem]?
+    let soldItems: [MenuItem]?
     
     init(auth: AuthDataResultModel, firstName: String, lastName: String) {
         self.firstName = firstName
@@ -85,6 +96,7 @@ struct Seller: Codable, Hashable {
         self.email = auth.email
         self.photoUrl = auth.photoUrl
         self.menu = []
+        self.soldItems = []
     }
     
     init(
@@ -94,7 +106,8 @@ struct Seller: Codable, Hashable {
         dateCreated : Date?,
         email: String?,
         photoUrl: String?,
-        menu: [MenuItem]?
+        menu: [MenuItem]?,
+        soldItems: [MenuItem]?
     ) {
         self.firstName = firstName
         self.lastName = lastName
@@ -103,6 +116,7 @@ struct Seller: Codable, Hashable {
         self.email = email
         self.photoUrl = photoUrl
         self.menu = menu
+        self.soldItems = soldItems
     }
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
@@ -112,6 +126,7 @@ struct Seller: Codable, Hashable {
         case email = "email"
         case photoUrl = "photo_url"
         case menu = "menu"
+        case soldItems = "sold_items"
     }
     
     init(from decoder: Decoder) throws {
@@ -123,6 +138,7 @@ struct Seller: Codable, Hashable {
         self.email = try container.decodeIfPresent(String.self, forKey: .email)
         self.photoUrl = try container.decodeIfPresent(String.self, forKey: .photoUrl)
         self.menu = try container.decodeIfPresent([MenuItem].self, forKey: .menu)
+        self.soldItems = try container.decodeIfPresent([MenuItem].self, forKey: .soldItems)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -134,6 +150,7 @@ struct Seller: Codable, Hashable {
         try container.encodeIfPresent(self.email, forKey: .email)
         try container.encodeIfPresent(self.photoUrl, forKey: .photoUrl)
         try container.encodeIfPresent(self.menu, forKey: .menu)
+        try container.encodeIfPresent(self.soldItems, forKey: .soldItems)
     }
 }
 
@@ -196,8 +213,43 @@ final class SellerManager {
             let seller = try document.data(as: Seller.self)
             sellers.append(seller)
         }
+        print(sellers.description)
+        
         
         return sellers
     }
+    
+    func updateMenuItemTime(menuItem: MenuItem) async throws -> MenuItem {
+        var updatedMenuItem = MenuItem(name: menuItem.name, price: menuItem.price ?? 0, description: menuItem.description ?? "", cuisine: menuItem.cuisine ?? "", images: menuItem.images, seller: menuItem.seller!)
+        
+        updatedMenuItem.date = Date()
+        updatedMenuItem.quantity = menuItem.quantity
+        
+        return updatedMenuItem
+    }
+    
+    
+    func addToSoldItems(menuItem: MenuItem) async throws {
+        
+        guard let seller = menuItem.seller else { return }
+        
+        var newMenuItem = try await updateMenuItemTime(menuItem: menuItem)
+        
+        guard let data = try? encoder.encode(newMenuItem) else {
+            throw URLError(.badURL)
+        }
+        
+        let dict: [String:Any] = [
+        
+            Seller.CodingKeys.soldItems.rawValue : FieldValue.arrayUnion([data])
+        
+        ]
+        
+        try await sellerDocument(userId: seller.userId).updateData(dict)
+        
+    }
+    
+    
+    
     
 }

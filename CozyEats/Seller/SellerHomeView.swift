@@ -19,48 +19,48 @@ struct FoodItemDataPoint: Identifiable {
     var numberOrdered: Int
 }
 
-var sevenDayData = [
-    ProfitDataPoint(day: "Mon", profits: 20),
-    ProfitDataPoint(day: "Tue", profits: 237),
-    ProfitDataPoint(day: "Wed", profits: 108),
-    ProfitDataPoint(day: "Thu", profits: 55),
-    ProfitDataPoint(day: "Fri", profits: 156),
-    ProfitDataPoint(day: "Sat", profits: 99),
-    ProfitDataPoint(day: "Sun", profits: 305)
-]
+//var sevenDayData = [
+//    ProfitDataPoint(day: "Mon", profits: 20),
+//    ProfitDataPoint(day: "Tue", profits: 237),
+//    ProfitDataPoint(day: "Wed", profits: 108),
+//    ProfitDataPoint(day: "Thu", profits: 55),
+//    ProfitDataPoint(day: "Fri", profits: 156),
+//    ProfitDataPoint(day: "Sat", profits: 99),
+//    ProfitDataPoint(day: "Sun", profits: 305)
+//]
 
-var thirtyDayData = [
-    ProfitDataPoint(day: "1", profits: 20),
-    ProfitDataPoint(day: "2", profits: 237),
-    ProfitDataPoint(day: "3", profits: 108),
-    ProfitDataPoint(day: "4", profits: 55),
-    ProfitDataPoint(day: "5", profits: 156),
-    ProfitDataPoint(day: "6", profits: 99),
-    ProfitDataPoint(day: "7", profits: 305),
-    ProfitDataPoint(day: "8", profits: 20),
-    ProfitDataPoint(day: "9", profits: 237),
-    ProfitDataPoint(day: "10", profits: 108),
-    ProfitDataPoint(day: "11", profits: 55),
-    ProfitDataPoint(day: "12", profits: 156),
-    ProfitDataPoint(day: "13", profits: 99),
-    ProfitDataPoint(day: "14", profits: 305),
-    ProfitDataPoint(day: "15", profits: 20),
-    ProfitDataPoint(day: "16", profits: 237),
-    ProfitDataPoint(day: "17", profits: 108),
-    ProfitDataPoint(day: "18", profits: 55),
-    ProfitDataPoint(day: "19", profits: 156),
-    ProfitDataPoint(day: "20", profits: 99),
-    ProfitDataPoint(day: "21", profits: 305),
-    ProfitDataPoint(day: "22", profits: 20),
-    ProfitDataPoint(day: "23", profits: 237),
-    ProfitDataPoint(day: "24", profits: 108),
-    ProfitDataPoint(day: "25", profits: 55),
-    ProfitDataPoint(day: "26", profits: 156),
-    ProfitDataPoint(day: "27", profits: 99),
-    ProfitDataPoint(day: "28", profits: 305),
-    ProfitDataPoint(day: "29", profits: 389),
-    ProfitDataPoint(day: "30", profits: 500)
-]
+//var thirtyDayData = [
+//    ProfitDataPoint(day: "1", profits: 20),
+//    ProfitDataPoint(day: "2", profits: 237),
+//    ProfitDataPoint(day: "3", profits: 108),
+//    ProfitDataPoint(day: "4", profits: 55),
+//    ProfitDataPoint(day: "5", profits: 156),
+//    ProfitDataPoint(day: "6", profits: 99),
+//    ProfitDataPoint(day: "7", profits: 305),
+//    ProfitDataPoint(day: "8", profits: 20),
+//    ProfitDataPoint(day: "9", profits: 237),
+//    ProfitDataPoint(day: "10", profits: 108),
+//    ProfitDataPoint(day: "11", profits: 55),
+//    ProfitDataPoint(day: "12", profits: 156),
+//    ProfitDataPoint(day: "13", profits: 99),
+//    ProfitDataPoint(day: "14", profits: 305),
+//    ProfitDataPoint(day: "15", profits: 20),
+//    ProfitDataPoint(day: "16", profits: 237),
+//    ProfitDataPoint(day: "17", profits: 108),
+//    ProfitDataPoint(day: "18", profits: 55),
+//    ProfitDataPoint(day: "19", profits: 156),
+//    ProfitDataPoint(day: "20", profits: 99),
+//    ProfitDataPoint(day: "21", profits: 305),
+//    ProfitDataPoint(day: "22", profits: 20),
+//    ProfitDataPoint(day: "23", profits: 237),
+//    ProfitDataPoint(day: "24", profits: 108),
+//    ProfitDataPoint(day: "25", profits: 55),
+//    ProfitDataPoint(day: "26", profits: 156),
+//    ProfitDataPoint(day: "27", profits: 99),
+//    ProfitDataPoint(day: "28", profits: 305),
+//    ProfitDataPoint(day: "29", profits: 389),
+//    ProfitDataPoint(day: "30", profits: 500)
+//]
 
 var pageViews = [
     PageViewDataPoint(day: "1", views: 2),
@@ -95,26 +95,98 @@ var pageViews = [
     PageViewDataPoint(day: "30", views: 50)
 ]
 
-var menu: [FoodItemDataPoint] = [
-    FoodItemDataPoint(name: "cookie", numberOrdered: 20),
-    FoodItemDataPoint(name: "taco", numberOrdered: 5),
-    FoodItemDataPoint(name: "pizza", numberOrdered: 11),
-    FoodItemDataPoint(name: "burger", numberOrdered: 13)
-]
+//var menu: [FoodItemDataPoint] = [
+//    FoodItemDataPoint(name: "cookie", numberOrdered: 20),
+//    FoodItemDataPoint(name: "taco", numberOrdered: 5),
+//    FoodItemDataPoint(name: "pizza", numberOrdered: 11),
+//    FoodItemDataPoint(name: "burger", numberOrdered: 13)
+//]
+
+
+@MainActor
+final class SellerHomeViewModel: ObservableObject {
+    @Published private(set) var user: Seller? = nil
+    @Published private(set) var thirtyDayData: [ProfitDataPoint] = []
+    @Published private(set) var sevenDayData: [ProfitDataPoint] = []
+    @Published private(set) var menu: [FoodItemDataPoint] = []
+    
+    
+    
+    func loadCurrentUser() async throws {
+        let authDataResult = try AuthenticationManager.shared.getAuthenticatedUser()
+        self.user = try await SellerManager.shared.getSeller(userId: authDataResult.uid)
+        
+        if let user = user, let soldItems = user.soldItems {
+            for item in soldItems {
+                let calendar = Calendar.current
+                if let date = item.date {
+                    let day = calendar.component(.day, from: date)
+                    thirtyDayData.append(ProfitDataPoint(day: String(day), profits: (item.price ?? 0) * (item.quantity ?? 0)))
+                    
+                    if (calculateDifference(date: date) > 0 && calculateDifference(date: date) < 7) {
+                        sevenDayData.append(ProfitDataPoint(day: String(day), profits: (item.price ?? 0) * (item.quantity ?? 0)))
+                    }
+                    
+                }
+            }
+            thirtyDayData = thirtyDayData.sorted(by: {Int($0.day) ?? 0 < Int($1.day) ?? 0})
+            sevenDayData = sevenDayData.sorted(by: {Int($0.day) ?? 0 < Int($1.day) ?? 0})
+            
+            for item in soldItems {
+                menu.append(FoodItemDataPoint(name: item.name, numberOrdered: item.quantity ?? 0))
+            }
+            
+            
+            
+            
+        }
+        
+        
+    }
+    
+    func calculateDifference(date: Date) -> Int {
+        let calendar = Calendar.current
+        guard let startDate = calendar.date(byAdding: .day, value: -7, to: Date()) else { return -1 }
+        let endDate = date
+        let difference = calendar.dateComponents([.day], from: startDate, to: endDate)
+        return difference.day ?? -1
+    }
+    
+    
+}
 
 
 
 struct SellerHomeView: View {
-
+    
+    @StateObject var viewModel = SellerHomeViewModel()
+    
     var body: some View {
         NavigationView {
             ZStack {
                 Color.tan.edgesIgnoringSafeArea(.all)
                 ScrollView {
-                    WeekProfitsView()
-                    MonthProfitsView()
-                    MonthPageViewsView()
-                    CustomerFavoritesView()
+                    
+//                    if let user = viewModel.user, let soldItems = user.soldItems {
+//                        ForEach(soldItems) { item in
+//                            VStack {
+//                                Text("\(item.name)")
+//                                Text("\(item.date ?? Date())")
+//                                Text("quantity: \(item.quantity ?? 0)")
+//                                Text("price of item: $\(item.price ?? 0)")
+//                            }
+//                        }
+//                    }
+                    
+//                    Text("items in the data: \(viewModel.thirtyDayData.description)")
+          
+                    
+                    
+                    
+                    WeekProfitsView(sevenDayProfitsTotal: calculateTotalProfits(data: viewModel.sevenDayData), sevenDayData: viewModel.sevenDayData)
+                    MonthProfitsView(thirtyDayProfitsTotal: calculateTotalProfits(data: viewModel.thirtyDayData), thirtyDayData: viewModel.thirtyDayData)
+//                    MonthPageViewsView()
+                    CustomerFavoritesView(menu: viewModel.menu)
                    
                     
        
@@ -127,7 +199,10 @@ struct SellerHomeView: View {
                     .padding()
                 }
             }
-            .navigationTitle("Your Business Data")
+            .task {
+                try? await viewModel.loadCurrentUser()
+            }
+            .navigationTitle("\(viewModel.user?.firstName ?? "User")'s Data")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                 }
@@ -147,18 +222,25 @@ func calculateTotalPageViews(data: [PageViewDataPoint]) -> Int {
 
 struct WeekProfitsView: View {
     @State private var averageIsShown7 = false
-    @State private var sevenDayProfitsTotal = calculateTotalProfits(data: sevenDayData) // Calculate total profits for 7 days
+    let sevenDayProfitsTotal: Int    // Calculate total profits for 7 days, sevenDayData: viewModel.sevenDayData)
+    let sevenDayData: [ProfitDataPoint]
 
     var body: some View {
         // View content for weekly profits
         Text("This Week's Profits")
+        
         Chart {
+            let totals = calculatebarTotal()
             ForEach(sevenDayData) { d in
+
+                
                 BarMark(
                     x: .value("Day", d.day),
-                    y: .value("Profits", d.profits))
+                    y: .value("Profits", Double(d.profits)))
                     .annotation{
-                        Text(String(d.profits)).foregroundColor(.green)
+                        if let day = Int(d.day) {
+                            Text("\(totals[day-1])").foregroundColor(.green)
+                        }
                     }
             }
             
@@ -182,10 +264,27 @@ struct WeekProfitsView: View {
         Toggle(averageIsShown7 ? "show 7-day average" : "hide 7-day average" , isOn: $averageIsShown7.animation())
             .padding()
     }
+    
+    func calculatebarTotal() -> [Int] {
+        
+        var totals: [Int] = [0,0,0,0,0,0,0]
+        
+        for item in sevenDayData {
+            if let day = Int(item.day) {
+                totals[day-1] += item.profits
+            }
+            
+        }
+        
+        return totals
+    }
+    
+    
 }
 struct MonthProfitsView: View {
     @State private var averageIsShown30 = false
-    @State private var thirtyDayProfitsTotal = calculateTotalProfits(data: thirtyDayData) // Calculate total profits for 30 days
+    let thirtyDayProfitsTotal: Int          // Calculate total profits for 30 days
+    let thirtyDayData: [ProfitDataPoint]
     var body: some View {
         // View content for monthly profits
         Text("This Month's Profits")
@@ -200,7 +299,7 @@ struct MonthProfitsView: View {
                 let averageProfit = thirtyDayProfitsTotal / 30
                 RuleMark(y: .value("Average", averageProfit))
                     .foregroundStyle(.gray)
-                    .annotation(position: .bottom, alignment: .bottomLeading) {
+                    .annotation(position: .bottom, alignment: .bottomTrailing) {
                         Text("Average Profit: \(averageProfit)")
                     }
             }
@@ -257,16 +356,20 @@ struct MonthPageViewsView: View {
 }
 
 struct CustomerFavoritesView: View {
+    
+    let menu: [FoodItemDataPoint]
+    
     var body: some View {
         // View content for customer favorites
         Text("Customer Favorites")
         Chart {
+            let total = calculateFavoriteTotals()
             ForEach(menu) { d in
                 BarMark(
                     x: .value("name", d.name),
                     y: .value("numberOrdered", d.numberOrdered))
-                .annotation{
-                    Text(String(d.numberOrdered)).foregroundColor(.green)
+                .annotation {
+                    Text(String(total[d.name] ?? 0)).foregroundColor(.green)
                 }
             }
         }
@@ -280,6 +383,19 @@ struct CustomerFavoritesView: View {
                                     .padding()
         }
 
+    }
+    
+    func calculateFavoriteTotals() -> [String: Int] {
+        var favorites: [String: Int] = [:]
+        for dish in menu {
+            if favorites.keys.description.contains(dish.name) {
+                favorites[dish.name]! += dish.numberOrdered 
+            } else {
+                favorites[dish.name] = dish.numberOrdered
+            }
+        }
+        
+        return favorites
     }
 }
 
